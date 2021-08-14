@@ -793,7 +793,7 @@ t_RM_cont_labels_v2_t<-t_RM_cont_labels_v2
 t_RM_cont_labels_v2_t$label<-factor(t_RM_cont_labels_v2_t$label,levels=c("C4543T_Syn_nsp3","G15766T_V776L_nsp12","G11083T_L37F_nsp6","A17615G_K460R_nsp13","T19839C_Syn_nsp15","A20268G_Syn_nsp15","C28887T_T205I_N"),ordered=TRUE)
 p_RM_cont_LF_morethanone<-ggplot(data=subset(t_RM_cont_labels_v2_t,Type=="LF"&y_m!="2021-Apr"&code%in%c("C4543T","G11083T","G15766T","A17615G","T19839C","A20268G","C25710","C28887T")),aes(x=y_m,y=NRFp,color=continent,group=continent))+geom_line(size=1)+facet_wrap(~label)+theme(strip.background=element_rect(color="white",fill="white"),legend.position="bottom",legend.title=element_blank(),axis.text.x=element_text(angle=90,hjust=1,vjust=0,size=10),axis.title.x=element_blank())+labs(y="NRFp")+scale_color_manual(values=col_conts)+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2)+guides(color=guide_legend(nrow=1))+ggtitle("More than one region - subtypes 8-13")
 p_RM_cont_LF<-ggarrange(p_RM_cont_LF_SouthAmerica,p_RM_cont_LF_Europe,p_RM_cont_LF_NorthAmerica,p_RM_cont_LF_Asia,p_RM_cont_LF_Oceania,p_RM_cont_LF_morethanone,ncol=1,heights=c(1,1,1,1,1,3))
-ggsave("Figure_S7.jpg",plot=p_RM_cont_LF,dpi=500,width=15,height=24)
+ggsave("Figure_S13.jpg",plot=p_RM_cont_LF,dpi=500,width=15,height=24)
 #Function to determine the presence of type of mutations in the continents
 ver_pres_muts<-function(type="HF"){
   data_filt<-t_RM_cont_labels_v2%>%dplyr::filter(Type==type)
@@ -861,7 +861,7 @@ for(z in MF_sample){
   for(i in 1:length(cont_tables)){
     if(names(cont_tables[i])==z&&names(cont_tables[i])!="G28883C"){
       p1<-ggplot(data=subset(t_RM_cont_labels_v2,y_m!="2021-Apr"&code==names(cont_tables[i])),aes(x=y_m,y=NRFp,color=continent,group=continent))+geom_line(size=1)+theme(legend.position="none",legend.title=element_blank(),axis.text.x=element_blank(),axis.title.x=element_blank())+labs(y="NRFp")+scale_color_manual(values=col_conts)+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2)+guides(color=guide_legend(nrow=1))+ggtitle(t_RM_cont_labels_v2$label[t_RM_cont_labels_v2$code==names(cont_tables[i])][1])
-      p2<-ggplot(data=subset(t_RM_cont_total_3,code==names(cont_tables[i])),aes(x=continent,y=NRFp,fill=continent))+geom_bar(stat="identity")+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2)+scale_fill_manual(values=col_conts)+theme(legend.position="none",axis.text.x=element_blank(),axis.title.x=element_blank())
+      p2<-ggplot(data=subset(t_RM_cont_total_3,code==names(cont_tables[i])),aes(x=continent,y=NRFp,fill=continent))+geom_bar(stat="identity")+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2,alpha=0.5)+scale_fill_manual(values=col_conts)+theme(legend.position="none",axis.text.x=element_blank(),axis.title.x=element_blank())+geom_text(aes(label=formatC(round(NRFp_cases,0),format="e",digits=1)),position=position_dodge(width=0.9),vjust="inward")
       chisq<-chisq.test(cont_tables[[i]])
       contrib <- 100*chisq$residuals^2/chisq$statistic
       contrib_df<-as.data.frame(chisq$residuals)
@@ -873,7 +873,7 @@ for(z in MF_sample){
       plot_chi_MF_t[[paste(names(cont_tables[i]),"_3",sep="")]]<-p3
     }else if(names(cont_tables[i])==z&&names(cont_tables[i])=="G28883C"){
       p1<-ggplot(data=subset(t_RM_cont_labels_v2,y_m!="2021-Apr"&code==names(cont_tables[i])),aes(x=y_m,y=NRFp,color=continent,group=continent))+geom_line(size=1)+theme(legend.position="none",legend.title=element_blank(),axis.text.x=element_text(angle=90,hjust=1,vjust=0),axis.title.x=element_blank())+labs(y="NRFp")+scale_color_manual(values=col_conts)+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2)+guides(color=guide_legend(nrow=1))+ggtitle(t_RM_cont_labels_v2$label[t_RM_cont_labels_v2$code==names(cont_tables[i])][1])
-      p2<-ggplot(data=subset(t_RM_cont_total_3,code==names(cont_tables[i])),aes(x=continent,y=NRFp,fill=continent))+geom_bar(stat="identity")+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2)+scale_fill_manual(values=col_conts)+theme(legend.position="none",axis.text.x=element_text(angle=45,vjust=0.5,hjust=0.5),axis.title.x=element_blank())
+      p2<-ggplot(data=subset(t_RM_cont_total_3,code==names(cont_tables[i])),aes(x=continent,y=NRFp,fill=continent))+geom_bar(stat="identity")+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2,alpha=0.5)+scale_fill_manual(values=col_conts)+theme(legend.position="none",axis.text.x=element_text(angle=45,vjust=0.5,hjust=0.5),axis.title.x=element_blank())+geom_text(aes(label=formatC(round(NRFp_cases,0),format="e",digits=1)),position=position_dodge(width=0.9),vjust="inward")
       chisq<-chisq.test(cont_tables[[i]])
       contrib <- 100*chisq$residuals^2/chisq$statistic
       contrib_df<-as.data.frame(chisq$residuals)
@@ -895,7 +895,7 @@ for(z in LF_sample){
   for(i in 1:length(cont_tables)){
     if(names(cont_tables[i])==z&&names(cont_tables[i])!="C28887T"){
       p1<-ggplot(data=subset(t_RM_cont_labels_v2,y_m!="2021-Apr"&code==names(cont_tables[i])),aes(x=y_m,y=NRFp,color=continent,group=continent))+geom_line(size=1)+theme(legend.position="none",legend.title=element_blank(),axis.text.x=element_blank(),axis.title.x=element_blank())+labs(y="NRFp")+scale_color_manual(values=col_conts)+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2)+guides(color=guide_legend(nrow=1))+ggtitle(t_RM_cont_labels_v2$label[t_RM_cont_labels_v2$code==names(cont_tables[i])][1])
-      p2<-ggplot(data=subset(t_RM_cont_total_3,code==names(cont_tables[i])),aes(x=continent,y=NRFp,fill=continent))+geom_bar(stat="identity")+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2)+scale_fill_manual(values=col_conts)+theme(legend.position="none",axis.text.x=element_blank(),axis.title.x=element_blank())
+      p2<-ggplot(data=subset(t_RM_cont_total_3,code==names(cont_tables[i])),aes(x=continent,y=NRFp,fill=continent))+geom_bar(stat="identity")+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2,alpha=0.5)+scale_fill_manual(values=col_conts)+theme(legend.position="none",axis.text.x=element_blank(),axis.title.x=element_blank())+geom_text(aes(label=formatC(round(NRFp_cases,0),format="e",digits=1)),position=position_dodge(width=0.9),vjust="inward")
       chisq<-chisq.test(cont_tables[[i]])
       contrib <- 100*chisq$residuals^2/chisq$statistic
       contrib_df<-as.data.frame(chisq$residuals)
@@ -907,7 +907,7 @@ for(z in LF_sample){
       plot_chi_LF_t[[paste(names(cont_tables[i]),"_3",sep="")]]<-p3
     }else if(names(cont_tables[i])==z&&names(cont_tables[i])=="C28887T"){
       p1<-ggplot(data=subset(t_RM_cont_labels_v2,y_m!="2021-Apr"&code==names(cont_tables[i])),aes(x=y_m,y=NRFp,color=continent,group=continent))+geom_line(size=1)+theme(legend.position="none",legend.title=element_blank(),axis.text.x=element_text(angle=90,hjust=1,vjust=0),axis.title.x=element_blank())+labs(y="NRFp")+scale_color_manual(values=col_conts)+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2)+guides(color=guide_legend(nrow=1))+ggtitle(t_RM_cont_labels_v2$label[t_RM_cont_labels_v2$code==names(cont_tables[i])][1])
-      p2<-ggplot(data=subset(t_RM_cont_total_3,code==names(cont_tables[i])),aes(x=continent,y=NRFp,fill=continent))+geom_bar(stat="identity")+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2)+scale_fill_manual(values=col_conts)+theme(legend.position="none",axis.text.x=element_text(angle=45,vjust=0.5,hjust=0.5),axis.title.x=element_blank())
+      p2<-ggplot(data=subset(t_RM_cont_total_3,code==names(cont_tables[i])),aes(x=continent,y=NRFp,fill=continent))+geom_bar(stat="identity")+geom_errorbar(aes(ymin=pmax(0,NRFp-NRFp_sd),ymax=pmin(NRFp+NRFp_sd,1)),show.legend=FALSE,width=.2,alpha=0.5)+scale_fill_manual(values=col_conts)+theme(legend.position="none",axis.text.x=element_text(angle=45,vjust=0.5,hjust=0.5),axis.title.x=element_blank())+geom_text(aes(label=formatC(round(NRFp_cases,0),format="e",digits=1)),position=position_dodge(width=0.9),vjust="inward")
       chisq<-chisq.test(cont_tables[[i]])
       contrib <- 100*chisq$residuals^2/chisq$statistic
       contrib_df<-as.data.frame(chisq$residuals)
@@ -921,7 +921,7 @@ for(z in LF_sample){
   }
 }
 ptotal_LF<-egg::ggarrange(plots=plot_chi_LF_t,nrow=13,labels=c("a","","","b","","","c","","","d","","","e","","","f","","","g","","","h","","","i","","","j","","","k","","","l","","","m","",""),label.args=list(gp=grid::gpar(fontsize=20,fontface="bold"),hjust=-0.5))
-ggsave("Figure_S8.jpg",plot=ptotal_LF,dpi=500,width=20,height=20)
+ggsave("Figure_S14.jpg",plot=ptotal_LF,dpi=500,width=20,height=20)
 #analysis of the MF mutations specific of regions by country
 t_RM_count_sample_MF<-t_RM_analysis_comp%>%
   dplyr::filter(code%in%MF_sample)%>%
@@ -959,20 +959,20 @@ p_cs_list[["C1059T"]]<-p_cs_coun("C1059T","NorthAmerica")
 
 p_fr<-ggarrange(plotlist=p_fr_list,labels=letters,ncol=4)  
 p_fr_f<-annotate_figure(p_fr,left=text_grob("Relative Frequencies",rot=90,size=15))
-ggsave("Figure_S9.jpg",plot=p_fr_f,dpi=500,height=10,width=15)
+ggsave("Figure_S7.jpg",plot=p_fr_f,dpi=500,height=10,width=15)
 p_cs<-ggarrange(plotlist=p_cs_list,labels=letters,ncol=4)  
 p_cs_f<-annotate_figure(p_cs,left=text_grob("Cumulative Number of Cases",rot=90,size=15))
-ggsave("Figure_S10.jpg",plot=p_cs_f,dpi=500,height=10,width=15)
+ggsave("Figure_S9.jpg",plot=p_cs_f,dpi=500,height=10,width=15)
 
 df<-t_RM_count_sample_MF%>%
   dplyr::filter(code=="C22227T",continent=="Europe")
 p_count_MF_fr<-ggplot(data=subset(df,y_m!="2021-Apr"&cum_sum>0),aes(x=y_m,y=freq,color=continent))+geom_point()+geom_errorbar(aes(ymin=pmax(0,freq-CI),ymax=pmin(freq+CI,1)),width=0.2)+facet_wrap(~country)+theme(strip.background=element_rect(fill="white",color="white"),legend.position="none",axis.title.x=element_blank(),axis.text.x=element_text(angle=90,hjust=0,vjust=0))+ggtitle(df$label[1])+scale_color_manual(values=col_conts)+labs(y="Relative Frequencies")
-ggsave("Figure_S11.jpg",plot=p_count_MF_fr,dpi=500,height=10,width=15)
+ggsave("Figure_S8.jpg",plot=p_count_MF_fr,dpi=500,height=10,width=15)
 
 df<-t_RM_count_sample_MF_cum%>%
   dplyr::filter(code=="C22227T",continent=="Europe")
 p_count_MF_cs<-ggplot(data=subset(df,y_m!="2021-Apr"&cum_sum>0),aes(x=y_m,y=cum_sum))+geom_bar(aes(fill=continent),stat="identity")+facet_wrap(~country,scales="free_y")+theme(strip.background=element_rect(fill="white",color="white"),legend.position="none",axis.title.x=element_blank(),axis.text.x=element_text(angle=90,hjust=0,vjust=0,size=10))+ggtitle(df$label[1])+scale_fill_manual(values=col_conts)+labs(y="Cumulative Number of Cases")
-ggsave("Figure_S12.jpg",plot=p_count_MF_cs,dpi=500,height=10,width=15)
+ggsave("Figure_S10.jpg",plot=p_count_MF_cs,dpi=500,height=10,width=15)
 
 #Generating table 1 of the paper##########################################
 ##
@@ -1243,7 +1243,7 @@ NY_cas_final_roll<-NY_cas_cor%>%
   dplyr::group_by(country,NY)%>%
   dplyr::mutate(roll_mean=zoo::rollmean(confirm,k=7,fill=0),roll_mean_NY=zoo::rollmean(NY_confirm,k=7,fill=0))
 p_log_count<-ggarrange(plotlist=p_pred_prob_NY_list,labels=letters,ncol=3,nrow=3)
-ggsave("Figure_S14.jpg",plot=p_log_count,dpi=500,height=15,width=15)
+ggsave("Figure_S16.jpg",plot=p_log_count,dpi=500,height=15,width=15)
 #create the tables that will be used to estimate the Rt
 write.table(HF_cas_final_roll,"HF_estimations.tsv",row.names=FALSE,sep="\t",quote=FALSE)
 write.table(MF_cas_final_roll,"MF_estimations.tsv",row.names=FALSE,sep="\t",quote=FALSE)
@@ -1373,7 +1373,7 @@ for(c in levels(matrix_boot_MF$country)){
 matrix_boot_MF_fin<-do.call(rbind,matrix_boot_MF_fin_list)
 str_df_MF<-do.call(rbind,str_df_list_MF)
 p_dist_MF<-ggarrange(plotlist=p_str_df_list_MF)
-ggsave("Figure_S15.jpg",plot=p_dist_MF,dpi=500,height=25,width=25)
+ggsave("Figure_S17.jpg",plot=p_dist_MF,dpi=500,height=25,width=25)
 #plot of the Rt of MF
 p_Rt_MF<-ggplot(data=subset(R_matrix_for_boot),aes(x=as.POSIXct(date),y=Rt,ymin=l_975,ymax=u_975,group=mut,color=mut))+facet_wrap(~country)+
   geom_bar(data=subset(R_matrix_for_boot,mut=="yes"&type%in%c("MF")),aes(y=(as.numeric(str_fac)-1)/2),stat="identity",color="gray84",fill="gray",alpha=0.5)+
@@ -1405,7 +1405,7 @@ legend_effect_MF<-get_legend(leg_effect_MF)
 p_effect_MF_fin<-ggarrange(p_effect_MF,common.legend=TRUE,legend.grob=legend_effect_MF,legend="bottom")
 
 p_ef_MG_final<-ggarrange(p_Rt_MF_fin,p_effect_MF_fin,labels=letters,ncol=1)
-ggsave(filename="Figure_S13.jpg",plot=p_ef_MG_final,dpi=500,width=10,height=15)
+ggsave(filename="Figure_S15.jpg",plot=p_ef_MG_final,dpi=500,width=10,height=15)
 #HF(N501Y)
 #Calculating significant difference of NY
 matrix_boot_NY<-R_matrix_for_boot%>%
@@ -1439,7 +1439,7 @@ for(c in levels(matrix_boot_NY$country)){
 matrix_boot_NY_fin<-do.call(rbind,matrix_boot_NY_fin_list)
 str_df_NY<-do.call(rbind,str_df_list_NY)
 p_dist_NY<-ggarrange(plotlist=p_str_df_list_NY)
-ggsave("Figure_S16.jpg",plot=p_dist_NY,dpi=500,height=20.8,width=25)
+ggsave("Figure_S18.jpg",plot=p_dist_NY,dpi=500,height=20.8,width=25)
 #plot of the Rt of MF
 p_Rt_NY<-ggplot(data=subset(R_matrix_for_boot),aes(x=as.POSIXct(date),y=Rt,ymin=l_975,ymax=u_975,group=mut,color=mut))+facet_wrap(~country)+
   geom_bar(data=subset(R_matrix_for_boot,mut=="no"&type%in%c("NY")),aes(y=(as.numeric(str_fac)-1)/2),stat="identity",color="gray84",fill="gray",alpha=0.5)+
@@ -1566,7 +1566,7 @@ for(c in levels(matrix_boot_GR_delay_NY$country)){
 matrix_boot_GR_delay_NY_fin<-do.call(rbind,matrix_boot_GR_delay_NY_fin_list)
 str_df_GR_delay_NY<-do.call(rbind,str_df_list_GR_delay_NY)
 p_dist_GR_delay_NY<-ggarrange(plotlist=p_str_df_list_GR_delay_NY)
-ggsave("Figure_S17.jpg",plot=p_dist_GR_delay_NY,dpi=500,height=20.8,width=25)
+ggsave("Figure_S19.jpg",plot=p_dist_GR_delay_NY,dpi=500,height=20.8,width=25)
 #plot of change of Rt in time
 p_gr_Rt_delay_NY<-ggplot(data=subset(R_matrix_GR_delay_for_boot),aes(x=as.POSIXct(date),y=gr_R,group=mut,color=mut))+facet_wrap(~country)+
   geom_segment(data=subset(R_matrix_GR_delay_for_boot,mut=="no"&type%in%c("NY")),aes(y=((as.numeric(str_fac)-1)/2.25)-2,xend=as.POSIXct(date),yend=-2),color="gray84",alpha=0.5)+
@@ -1583,7 +1583,7 @@ p_gr_delay_effect_NY<-ggerrorplot(data=subset(matrix_GR_delay_boot,type=="NY"),s
   scale_y_continuous(limits=c(-0.45,0.45))+
   stat_pvalue_manual(str_df_GR_delay_NY,x="str_fac",y.position=0.4,label="p.signif")
 p_gr_delay_effect_NY_fin<-ggarrange(p_gr_delay_effect_NY,common.legend=TRUE,legend.grob=legend_effect_NY,legend="bottom")
-ggsave("Figure_S18.jpg",plot=p_gr_delay_effect_NY_fin,dpi=500,width=10,height=7.5)
+ggsave("Figure_S20.jpg",plot=p_gr_delay_effect_NY_fin,dpi=500,width=10,height=7.5)
 #Plot of difference between Rt in different stringency levels and plot of change of Rt in time
 p_gr_delay_ef_NY_final<-ggarrange(p_effect_NY_fin,p_gr_Rt_delay_NY_fin,labels=letters,ncol=1)
 ggsave("Figure_4.jpg",plot=p_gr_delay_ef_NY_final,dpi=500,width=10,height=15)
