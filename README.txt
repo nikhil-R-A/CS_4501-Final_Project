@@ -1,4 +1,4 @@
-This repository contain the scripts used in performing the analysis of the scientific reports manuscript entitled:
+This repository contains the scripts used in performing the analysis of the scientific reports manuscript entitled:
 "Dynamics of SARS-CoV-2 mutations reveals regional-specificity and similar trends of N501 and High-Frequency mutation N501Y in different levels of control measures"
 Justo et al. 2021
 
