@@ -1,6 +1,7 @@
 This repository contains the scripts used in performing the analysis of the scientific reports manuscript entitled:
 "Dynamics of SARS-CoV-2 mutations reveals regional-specificity and similar trends of N501 and High-Frequency mutation N501Y in different levels of control measures"
 Justo et al. 2021
+https://doi.org/10.1038/s41598-021-97267-7
 
 Description of files:
 Preparation/ = This folder contain the python scripts and files necessary to perform the filtrations of low quality genomes from the GISAID database and the alignment against the reference.
